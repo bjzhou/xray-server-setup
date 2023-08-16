@@ -1,0 +1,14 @@
+[Unit]
+Description=mosdns Service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/etc/mosdns
+ExecStart=/usr/local/bin/mosdns start
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

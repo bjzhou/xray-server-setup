@@ -1,0 +1,79 @@
+log:
+  level: info
+  file: "/etc/mosdns/mosdns.log"
+
+include: []
+
+plugins:
+  # CF IP列表
+  - tag: geoip_cloudflare
+    type: ip_set
+    args:
+      files:
+        - "/etc/mosdns/geoip_cloudflare.txt"
+  # Netflix 域名列表
+  - tag: geosite_netflix
+    type: domain_set
+    args:
+      files:
+        - "/etc/mosdns/geosite_netflix.txt"
+
+  # 缓存
+  - tag: lazy_cache
+    type: cache
+    args:
+      size: 20000
+      lazy_cache_ttl: 86400
+      dump_file: "/etc/mosdns/cache.dump"
+      dump_interval: 600
+
+  # 转发至Netflix DNS解锁服务器
+  - tag: forward_netflix
+    type: forward
+    args:
+      upstreams:
+        - addr: 163.53.18.89
+
+  # 转发至远程服务器
+  - tag: forward_remote
+    type: forward
+    args:
+      upstreams:
+        - addr: "tcp://8.8.8.8"
+          enable_pipeline: true
+        - addr: "tcp://1.1.1.1"
+          enable_pipeline: true
+
+  # 有响应则终止返回
+  - tag: has_resp_sequence
+    type: sequence
+    args:
+      - matches: has_resp
+        exec: accept
+
+  # 主要的运行逻辑插件
+  - tag: main_sequence
+    type: sequence
+    args:
+      - exec: $lazy_cache
+      - exec: prefer_ipv4
+      - matches: qname $geosite_netflix
+        exec: $forward_netflix
+      - exec: jump has_resp_sequence
+      - exec: $forward_remote
+      - matches: resp_ip $geoip_cloudflare
+        exec: black_hole 104.19.46.228
+
+  # 启动 udp 服务器。
+  - tag: udp_server
+    type: udp_server
+    args:
+      entry: main_sequence
+      listen: ":1053"
+
+  # 启动 tcp 服务器。
+  - tag: tcp_server
+    type: tcp_server
+    args:
+      entry: main_sequence
+      listen: ":1053"
