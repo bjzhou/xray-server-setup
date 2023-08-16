@@ -20,6 +20,7 @@ wget -O /etc/mosdns/geosite_netflix.txt https://github.com/bjzhou/xray-server-se
 wget -O /etc/systemd/system/mosdns.service https://github.com/bjzhou/xray-server-setup/raw/main/mosdns/mosdns.service
 systemctl enable mosdns.service
 systemctl start mosdns.service
+rm -rf mosdns.zip
 
 echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
