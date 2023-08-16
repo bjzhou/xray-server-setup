@@ -1,0 +1,34 @@
+{
+    "log": {
+        "loglevel": "warning",
+        "access": "/var/log/xray/access.log",
+        "error": "/var/log/xray/error.log"
+    },
+    "inbounds": [
+        {
+            "port": 25000,
+            "protocol": "shadowsocks",
+            "settings": {
+                "password": "v3jJ901oQzZc547G7Ul6zzaydgKMtmdMP1Cw4VKajlE=",
+                "method": "aes-128-gcm",
+                "network": "tcp,udp"
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIP"
+            }
+        }
+    ],
+    "routing": {
+        "domainStrategy": "IPIfNonMatch"
+    },
+    "dns": {
+        "servers": [
+            "tcp+local://127.0.0.1:1053"
+        ]
+    }
+}
