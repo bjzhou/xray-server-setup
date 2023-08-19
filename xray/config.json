@@ -8,6 +8,10 @@
         {
             "port": 25000,
             "protocol": "shadowsocks",
+            "sniffing": {
+                "enabled": true,
+                "destOverride": ["http", "tls"]
+            },
             "settings": {
                 "password": "PASSWORD_PLACEHOLDER",
                 "method": "2022-blake3-aes-128-gcm",
