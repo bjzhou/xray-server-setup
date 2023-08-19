@@ -44,6 +44,8 @@ https://github.com/XIU2/CloudflareSpeedTest/releases
 ./CloudflareST -url https://download.parallels.com/desktop/v15/15.1.5-47309/ParallelsDesktop-15.1.5-47309.dmg
 ```
 
+### Credits
+
 * [Xray core](https://github.com/XTLS/Xray-core)
 * [Xray install](https://github.com/XTLS/Xray-install)
 * [mosdns](https://github.com/IrineSistiana/mosdns)
