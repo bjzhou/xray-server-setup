@@ -6,7 +6,7 @@ apt install -y unzip
 bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 wget -O /usr/local/etc/xray/config.json https://github.com/bjzhou/xray-server-setup/raw/main/xray/config.json
 newpass=`openssl rand -base64 16`
-sed -i "s/PASSWORD_PLACEHOLDER/$newpass/g" /usr/local/etc/xray/config.json
+sed -i "s|PASSWORD_PLACEHOLDER|$newpass|g" /usr/local/etc/xray/config.json
 wget -O mosdns.zip https://github.com/IrineSistiana/mosdns/releases/download/v5.1.3/mosdns-linux-amd64.zip
 mkdir mosdns_temp
 unzip mosdns.zip -d mosdns_temp
@@ -30,7 +30,14 @@ sysctl -p
 
 systemctl restart xray
 ip=`curl ifconfig.me`
-echo "server：$ip
+
+echo "
+
+Shadowsocks information 👇
+
+server：$ip
 port：25000
 method：2022-blake3-aes-128-gcm
-password: $newpass"
+password: $newpass
+
+"
